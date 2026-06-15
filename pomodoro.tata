@@ -1,0 +1,19 @@
+{
+  "manifest": {
+    "name": "Pomodoro Timer",
+    "version": "1.0.0",
+    "author": "DomainOS",
+    "description": "A focus timer using the Pomodoro technique.",
+    "category": "utility",
+    "icon": null,
+    "longDescription": "25-minute work sessions with 5-minute breaks. Track your focus sessions and stay productive.",
+    "tags": ["timer", "productivity", "pomodoro"],
+    "permissions": ["storage"],
+    "width": 360,
+    "height": 480,
+    "resizable": false
+  },
+  "code": "document.addEventListener('tata-ready', function() {\n  const app = document.getElementById('app');\n  let timeLeft = 25 * 60;\n  let running = false;\n  let interval = null;\n  let sessions = parseInt(tata.storage.get('sessions') || '0');\n\n  function fmt(s) { return Math.floor(s/60).toString().padStart(2,'0') + ':' + (s%60).toString().padStart(2,'0'); }\n  function update() { document.getElementById('timer').textContent = fmt(timeLeft); document.getElementById('sessions').textContent = sessions + ' sessions completed'; }\n\n  function start() {\n    if (running) return;\n    running = true;\n    interval = setInterval(() => {\n      timeLeft--;\n      update();\n      if (timeLeft <= 0) {\n        clearInterval(interval);\n        running = false;\n        sessions++;\n        tata.storage.set('sessions', String(sessions));\n        tata.notify('Pomodoro', 'Time is up! Take a break.');\n        timeLeft = 5 * 60;\n        update();\n      }\n    }, 1000);\n  }\n\n  function pause() { clearInterval(interval); running = false; }\n  function reset() { pause(); timeLeft = 25 * 60; update(); }\n\n  app.innerHTML = '<div class=\"pomo\"><div class=\"pomo-label\">Focus Time</div><div id=\"timer\" class=\"pomo-timer\">25:00</div><div id=\"sessions\" class=\"pomo-sessions\">0 sessions</div><div class=\"pomo-btns\"><button id=\"start\" class=\"pomo-btn\">▶ Start</button><button id=\"pause\" class=\"pomo-btn secondary\">⏸ Pause</button><button id=\"reset\" class=\"pomo-btn secondary\">↺ Reset</button></div></div>';\n  document.getElementById('start').onclick = start;\n  document.getElementById('pause').onclick = pause;\n  document.getElementById('reset').onclick = reset;\n  update();\n  tata.log('Pomodoro loaded');\n});",
+  "css": ".pomo { padding: 30px; text-align: center; font-family: -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; color: #fff; max-width: 340px; margin: 0 auto; }\n.pomo-label { font-size: 0.9rem; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; }\n.pomo-timer { font-size: 4rem; font-weight: 700; font-variant-numeric: tabular-nums; margin: 16px 0; }\n.pomo-sessions { font-size: 0.85rem; opacity: 0.7; margin-bottom: 24px; }\n.pomo-btns { display: flex; gap: 8px; justify-content: center; }\n.pomo-btn { padding: 10px 20px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; background: #fff; color: #764ba2; transition: transform 0.1s; }\n.pomo-btn:hover { transform: scale(1.05); }\n.pomo-btn.secondary { background: rgba(255,255,255,0.2); color: #fff; }",
+  "html": "<div id=\"app\"><p style=\"padding:20px;color:#fff;\">Loading...</p></div>"
+}

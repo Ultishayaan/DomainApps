@@ -1,0 +1,19 @@
+{
+  "manifest": {
+    "name": "Calculator",
+    "version": "1.0.0",
+    "author": "DomainOS",
+    "description": "A simple calculator app for DomainOS.",
+    "category": "tool",
+    "icon": null,
+    "longDescription": "A clean, functional calculator with basic arithmetic operations. Supports addition, subtraction, multiplication, and division.",
+    "tags": ["calculator", "math", "tool"],
+    "permissions": [],
+    "width": 400,
+    "height": 550,
+    "resizable": false
+  },
+  "code": "document.addEventListener('tata-ready', function() {\n  const app = document.getElementById('app');\n  let current = '';\n  let operator = '';\n  let prev = '';\n\n  function update() {\n    document.getElementById('display').value = current || '0';\n  }\n\n  function calc() {\n    const a = parseFloat(prev);\n    const b = parseFloat(current);\n    if (operator === '+') return a + b;\n    if (operator === '-') return a - b;\n    if (operator === '*') return a * b;\n    if (operator === '/') return b !== 0 ? a / b : 'Error';\n    return b;\n  }\n\n  app.innerHTML = '<div class=\"calc\"><input id=\"display\" class=\"calc-display\" readonly value=\"0\"><div class=\"calc-grid\">' +\n    ['C','±','%','÷','7','8','9','×','4','5','6','−','1','2','3','+','0','0','.','='].map(b =>\n      '<button class=\"calc-btn' + (['÷','×','−','+','='].includes(b) ? ' op' : '') + '\" data-val=\"' + b + '\">' + b + '</button>'\n    ).join('') + '</div></div>';\n\n  app.querySelectorAll('.calc-btn').forEach(btn => {\n    btn.addEventListener('click', () => {\n      const v = btn.dataset.val;\n      if (v === 'C') { current = ''; prev = ''; operator = ''; update(); return; }\n      if (v === '±') { current = String(-parseFloat(current)); update(); return; }\n      if (v === '%') { current = String(parseFloat(current) / 100); update(); return; }\n      if (['÷','×','−','+'].includes(v)) { prev = current || prev; operator = v === '÷' ? '/' : v === '×' ? '*' : v === '−' ? '-' : v; current = ''; return; }\n      if (v === '=') { current = String(calc()); prev = ''; operator = ''; update(); return; }\n      if (v === '.') { if (!current.includes('.')) current += '.'; update(); return; }\n      current += v;\n      update();\n    });\n  });\n\n  tata.log('Calculator loaded');\n});",
+  "css": ".calc { padding: 12px; font-family: -apple-system, sans-serif; background: #1a1a2e; border-radius: 12px; max-width: 360px; margin: 0 auto; }\n.calc-display { width: 100%; padding: 16px; font-size: 2rem; text-align: right; background: #16213e; color: #e94560; border: none; border-radius: 8px; margin-bottom: 12px; font-family: inherit; }\n.calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }\n.calc-btn { padding: 18px; font-size: 1.2rem; border: none; border-radius: 8px; background: #0f3460; color: #fff; cursor: pointer; transition: background 0.15s; }\n.calc-btn:hover { background: #1a508b; }\n.calc-btn:active { transform: scale(0.95); }\n.calc-btn.op { background: #e94560; color: #fff; }\n.calc-btn.op:hover { background: #ff6b6b; }",
+  "html": "<div id=\"app\"><p style=\"padding:20px;color:#fff;\">Loading...</p></div>"
+}
