@@ -1,0 +1,21 @@
+{
+  "manifest": {
+    "name": "Libby",
+    "version": "1.0.0",
+    "author": "OverDrive",
+    "description": "Borrow ebooks and audiobooks with Libby.",
+    "longDescription": "Opens Libby (libbyapp.com) so you can borrow and read library ebooks and audiobooks from your library.",
+    "category": "education",
+    "icon": null,
+    "externalUrl": "https://libbyapp.com",
+    "homepage": "https://libbyapp.com",
+    "tags": ["library", "ebooks", "audiobooks", "reading", "overdrive"],
+    "permissions": [],
+    "width": 420,
+    "height": 640,
+    "resizable": true
+  },
+  "code": "// External app — DomainOS launches manifest.externalUrl in a new tab.",
+  "css": "",
+  "html": "<div id=\"app\"></div>"
+}
